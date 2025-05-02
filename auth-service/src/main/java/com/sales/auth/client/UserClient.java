@@ -7,7 +7,6 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
 @FeignClient(name = "user-service", url = "http://localhost:8083" ,configuration = FeignClientConfig.class)
-//@FeignClient(name = "user-service", url = "http://user-service:8083" ,configuration = FeignClientConfig.class)
 
 public interface UserClient {
 
