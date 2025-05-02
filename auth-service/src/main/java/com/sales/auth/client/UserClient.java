@@ -6,7 +6,7 @@ import com.sales.auth.model.dto.UserResponseDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
-@FeignClient(name = "user-service", url = "http://localhost:8083" ,configuration = FeignClientConfig.class)
+@FeignClient(name = "user-service", url = "${user-service.url}", configuration = FeignClientConfig.class)
 
 public interface UserClient {
 

@@ -24,6 +24,8 @@ services:
       - redis
     environment:
       SPRING_PROFILES_ACTIVE: docker
+      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_PORT: 6379
     networks:
       - backend
 
@@ -33,10 +35,15 @@ services:
     container_name: order-service
     ports:
       - "8082:8082"
+    depends_on:
+      - redis
     environment:
       SPRING_PROFILES_ACTIVE: docker
+      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_PORT: 6379
     networks:
       - backend
+
   frontend:
     build: ./Sales-Application-Frontend
     ports:
