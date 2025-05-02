@@ -37,6 +37,14 @@ services:
       SPRING_PROFILES_ACTIVE: docker
     networks:
       - backend
+  frontend:
+    build: ./Sales-Application-Frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - auth-service
+      - user-service
+      - order-service
 
   redis:
     image: redis:7-alpine

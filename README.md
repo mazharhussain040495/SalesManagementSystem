@@ -49,7 +49,7 @@ sales-management-system/
 | Service        | Port | Description |
 |----------------|------|-------------|
 | `auth-service` | 8080 | Login, Register, JWT |
-| `user-service` | 8081 | User management |
+| `user-service` | 8083 | User management |
 | `order-service`| 8082 | Order management |
 
 ### API Endpoints
@@ -98,7 +98,7 @@ Each service exposes REST endpoints, documented using Swagger.
 1. Clone the repo
 
 ```bash
-git clone https://github.com/your-username/sales-management-system.git
+git https://github.com/mazharhussain040495/SalesManagementSystem
 cd sales-management-system
 ```
 
@@ -111,6 +111,8 @@ docker-compose up --build
 3. Access the services:
    - Frontend: `http://localhost:4200`
    - Swagger UIs (see ports above)
+
+
 
 ### 🐝 Docker Swarm (Optional Production Deployment)
 
@@ -134,7 +136,15 @@ docker stack deploy -c docker-compose.yml sales-system
 docker service ls
 ```
 
+4. To Stop Docker
+```bash
+docker-compose down
+docker network prune
+```
+
 ---
+
+
 
 ## 🧰 Redis Caching
 
@@ -157,7 +167,7 @@ Used for internal REST API communication between microservices. For example:
 
 ## 👨‍💻 Contributors
 
-- **Developer**: Your Name  
+- **Developer**: Mazhar Hussain  
 - **Stack**: Java 19, Spring Boot 3.4.5, Angular 19, Docker
 
 ---
