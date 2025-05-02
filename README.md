@@ -48,8 +48,8 @@ sales-management-system/
 
 | Service        | Port | Description |
 |----------------|------|-------------|
-| `auth-service` | 8080 | Login, Register, JWT |
-| `user-service` | 8081 | User management |
+| `auth-service` | 8081 | Login, Register, JWT |
+| `user-service` | 8083 | User management |
 | `order-service`| 8082 | Order management |
 
 ### API Endpoints
