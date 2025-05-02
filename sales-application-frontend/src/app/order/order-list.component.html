@@ -1,0 +1,35 @@
+<div class="order-list-container">
+  <h2>Order List</h2>
+
+  <div *ngIf="error" class="error-message">{{ error }}</div>
+
+  <button class="add-button" (click)="addOrder()">+ Add New Order</button>
+
+  <table *ngIf="orders.length" class="order-table">
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Qty</th>
+        <th>Price</th>
+        <th>Email</th>
+        <th>Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let order of orders">
+        <td>{{ order.productName }}</td>
+        <td>{{ order.quantity }}</td>
+        <td>{{ order.price }}</td>
+        <td>{{ order.customerEmail }}</td>
+        <td>{{ order.orderDate | date: 'short' }}</td>
+        <td>
+          <button class="edit-button" (click)="editOrder(order.id)">Edit</button>
+          <button class="delete-button" (click)="deleteOrder(order.id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="!orders.length" class="no-data">No orders available.</p>
+</div>

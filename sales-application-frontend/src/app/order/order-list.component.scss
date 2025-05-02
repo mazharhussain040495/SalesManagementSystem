@@ -1,0 +1,93 @@
+.order-list-container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 30px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+    font-family: 'Segoe UI', sans-serif;
+  
+    h2 {
+      text-align: center;
+      margin-bottom: 24px;
+      color: #333;
+    }
+  
+    .error-message {
+      color: #d9534f;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+  
+    .add-button {
+      background-color: #28a745;
+      color: white;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-bottom: 16px;
+      transition: background-color 0.3s ease;
+  
+      &:hover {
+        background-color: #218838;
+      }
+    }
+  
+    .order-table {
+      width: 100%;
+      border-collapse: collapse;
+  
+      th, td {
+        padding: 12px 16px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+  
+      th {
+        background-color: #f8f9fa;
+        color: #333;
+      }
+  
+      td {
+        vertical-align: middle;
+      }
+  
+      .edit-button,
+      .delete-button {
+        padding: 6px 12px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 500;
+        margin-right: 6px;
+        transition: background-color 0.2s ease;
+      }
+  
+      .edit-button {
+        background-color: #007bff;
+        color: white;
+  
+        &:hover {
+          background-color: #0069d9;
+        }
+      }
+  
+      .delete-button {
+        background-color: #dc3545;
+        color: white;
+  
+        &:hover {
+          background-color: #c82333;
+        }
+      }
+    }
+  
+    .no-data {
+      text-align: center;
+      color: #777;
+      margin-top: 20px;
+    }
+  }
+  

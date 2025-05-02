@@ -1,0 +1,56 @@
+version: '3.9'
+
+services:
+  auth-service:
+    build:
+      context: ./auth-service
+    container_name: auth-service
+    ports:
+      - "8081:8081"
+    depends_on:
+      - redis
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    networks:
+      - backend
+
+  user-service:
+    build:
+      context: ./user-service
+    container_name: user-service
+    ports:
+      - "8083:8083"
+    depends_on:
+      - redis
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    networks:
+      - backend
+
+  order-service:
+    build:
+      context: ./order-service
+    container_name: order-service
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    networks:
+      - backend
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - backend
+
+volumes:
+  redis-data:
+
+networks:
+  backend:
+    driver: bridge
