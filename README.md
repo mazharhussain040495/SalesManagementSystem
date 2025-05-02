@@ -157,7 +157,7 @@ Used for internal REST API communication between microservices. For example:
 
 ## 👨‍💻 Contributors
 
-- **Developer**: Your Name  
+- **Developer**: Mazhar Hussain  
 - **Stack**: Java 19, Spring Boot 3.4.5, Angular 19, Docker
 
 ---
