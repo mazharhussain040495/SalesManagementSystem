@@ -8,8 +8,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -25,9 +27,8 @@ public class OrderService {
      * Place a new order and store it in the database.
      * The created order is also cached.
      */
-    @CachePut(value = "orders",
-            condition = "#orderRequest != null and #orderRequest.id() != null",
-            key = "#orderRequest.id")
+    @CachePut(value = "order", key = "#result.id", condition = "#result != null")
+    @CacheEvict(value = { "orders" }, allEntries = true)
     public OrderResponseDTO placeOrder(OrderRequestDTO orderRequest) {
         Order order = new Order();
         order.setProductName(orderRequest.productName());
@@ -43,7 +44,7 @@ public class OrderService {
      * Fetch an order by its ID from the database.
      * This method first checks the Redis cache before hitting the database.
      */
-    @Cacheable(value = "orders",condition = "#id != null", key = "#id")
+    @Cacheable(value = "order", key = "#root.args[0]")
     public Optional<OrderResponseDTO> getOrderById(Long id) {
         return orderRepository.findById(id)
                 .map(this::mapToResponseDTO);
@@ -53,6 +54,7 @@ public class OrderService {
      * Get all orders placed by a customer, identified by their email.
      * Caching is not done for this method as customer-specific data could be updated often.
      */
+    @Cacheable(value = "orderByEmail", key = "#root.args[0]")
     public List<OrderResponseDTO> getOrdersByCustomer(String email) {
         return orderRepository.findByCustomerEmail(email)
                 .stream()
@@ -64,6 +66,7 @@ public class OrderService {
      * Fetch all orders from the database.
      * Caching is not done here as it may return a large set of orders that may change frequently.
      */
+    @Cacheable(value = "orders")
     public List<OrderResponseDTO> getAllOrders() {
         return orderRepository.findAll()
                 .stream()
@@ -75,7 +78,11 @@ public class OrderService {
      * Delete an order by its ID.
      * The cache for the specific order is evicted after deletion.
      */
-    @CacheEvict(value = "orders",condition = "#id != null",key = "#id")
+    @Caching(evict = {
+            @CacheEvict(value = "order", key = "#root.args[0]"),
+            @CacheEvict(value = "orders", allEntries = true),
+            @CacheEvict(value = "orderByEmail", allEntries = true) // if email not known
+    })
     public void deleteOrder(Long id) {
         if (!orderRepository.existsById(id)) {
             throw new NoSuchElementException("Order not found with id: " + id);
@@ -87,7 +94,13 @@ public class OrderService {
      * Update an existing order by ID.
      * If the order exists, it is updated and cache is refreshed.
      */
-    @CachePut(value = "orders", condition = "#id != null", key = "#id")
+
+
+    @Caching(put = {
+            @CachePut(value = "order", key = "#root.args[0]"),
+            @CachePut(value = "orderByEmail", key = "#result.customerEmail")
+    })
+    @CacheEvict(value = {"orders"}, allEntries = true)
     public OrderResponseDTO updateOrder(Long id, OrderRequestDTO orderRequest) {
         Order existingOrder = orderRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Order not found with id: " + id));
@@ -106,12 +119,13 @@ public class OrderService {
      * Map an Order entity to an OrderResponseDTO.
      */
     private OrderResponseDTO mapToResponseDTO(Order order) {
+        String formattedDate = order.getOrderDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         return new OrderResponseDTO(
                 order.getId(),
                 order.getProductName(),
                 order.getQuantity(),
                 order.getPrice(),
-                order.getOrderDate(),
+                formattedDate,
                 order.getCustomerEmail()
         );
     }

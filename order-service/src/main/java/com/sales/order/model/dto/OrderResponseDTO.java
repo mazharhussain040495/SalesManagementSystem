@@ -7,6 +7,6 @@ public record OrderResponseDTO(
         String productName,
         int quantity,
         double price,
-        LocalDateTime orderDate,
+        String orderDate,
         String customerEmail
 ) {}

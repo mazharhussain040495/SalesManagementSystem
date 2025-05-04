@@ -30,12 +30,10 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @CachePut(
-            value = "userByEmail",
-            condition = "#userDto != null and #userDto.email() != null",
-            key = "#userDto.email()"
-    )
-    @CacheEvict(value = "allUsers", allEntries = true)
+
+    @CachePut(value = "user", key = "#result.id", condition = "#result != null")
+    @CacheEvict(value = { "users" }, allEntries = true)
+
     public UserResponseDTO registerUser(UserDTO userDto) {
         if (userRepository.findByEmail(userDto.email()).isPresent()) {
             throw new UserAlreadyExistsException("User with email already exists: " + userDto.email());
@@ -53,12 +51,7 @@ public class UserService {
     }
 
 
-    @Cacheable(
-            value = "userByEmail",
-            key = "#email",
-            condition = "#email != null && !#email.isEmpty()",
-            unless = "#result == null"
-    )
+    @Cacheable(value = "userByEmail", key = "#root.args[0]")
     public UserResponseDTO getUserByEmail(String email) {
         if (email == null || email.isEmpty()) {
             throw new IllegalArgumentException("Email cannot be null or empty");
@@ -71,22 +64,25 @@ public class UserService {
     }
 
 
-    @Cacheable(value = "allUsers")
+    @Cacheable(value = "users")
     public List<UserResponseDTO> getAllUsers() {
         return userRepository.findAll().stream()
                 .map(this::mapToResponseDTO)
                 .toList();
     }
 
-    @Cacheable(value = "user", key = "#id",condition = "#id != null")
+    @Cacheable(value = "user", key = "#root.args[0]")
     public UserResponseDTO getUserById(Long id) {
         return userRepository.findById(id)
                 .map(this::mapToResponseDTO)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
     }
 
-    @CachePut(value = "user", key = "#id", condition = "#id != null")
-    @CacheEvict(value = "allUsers", allEntries = true)
+    @Caching(put = {
+            @CachePut(value = "user", key = "#root.args[0]"),
+            @CachePut(value = "userByEmail", key = "#result.email")
+    })
+    @CacheEvict(value = {"users"}, allEntries = true)
     public UserResponseDTO updateUser(Long id, UserDTO dto) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
@@ -99,10 +95,12 @@ public class UserService {
         return mapToResponseDTO(userRepository.save(user));
     }
 
-    @Caching(evict = {
-            @CacheEvict(value = "user", key = "#id", condition = "#id != null"),
-            @CacheEvict(value = "allUsers", allEntries = true)
-    })
+
+   @Caching(evict = {
+           @CacheEvict(value = "user", key = "#root.args[0]"),
+           @CacheEvict(value = "users", allEntries = true),
+           @CacheEvict(value = "userByEmail", allEntries = true) // if email not known
+   })
     public void deleteUser(Long id) {
         if (!userRepository.existsById(id)) {
             throw new UserNotFoundException("User not found with id: " + id);
