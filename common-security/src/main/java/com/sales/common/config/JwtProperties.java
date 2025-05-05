@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 @Component
-//@Configuration
 @ConfigurationProperties(prefix = "jwt")
 public class JwtProperties {
     private String userSecret;

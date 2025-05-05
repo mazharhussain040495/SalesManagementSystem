@@ -52,6 +52,8 @@ services:
       - auth-service
       - user-service
       - order-service
+    networks:
+      - backend
 
   redis:
     image: redis:7-alpine
