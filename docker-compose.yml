@@ -1,6 +1,31 @@
 version: '3.9'
 
 services:
+  consul:
+    image: consul:1.9.5
+    container_name: consul
+    ports:
+      - "8005:8500"  # Consul UI
+      - "8700:8700/udp"
+    command: consul agent -dev -client=0.0.0.0
+    networks:
+      - backend
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   auth-service:
     build:
       context: ./auth-service
@@ -9,8 +34,13 @@ services:
       - "8081:8081"
     depends_on:
       - redis
+      - consul
     environment:
       SPRING_PROFILES_ACTIVE: docker
+      SPRING_CLOUD_CONSUL_HOST: consul
+      SPRING_CLOUD_CONSUL_PORT: 8500
+      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_PORT: 6379
     networks:
       - backend
 
@@ -22,8 +52,11 @@ services:
       - "8083:8083"
     depends_on:
       - redis
+      - consul
     environment:
       SPRING_PROFILES_ACTIVE: docker
+      SPRING_CLOUD_CONSUL_HOST: consul
+      SPRING_CLOUD_CONSUL_PORT: 8500
       SPRING_REDIS_HOST: redis
       SPRING_REDIS_PORT: 6379
     networks:
@@ -37,8 +70,11 @@ services:
       - "8082:8082"
     depends_on:
       - redis
+      - consul
     environment:
       SPRING_PROFILES_ACTIVE: docker
+      SPRING_CLOUD_CONSUL_HOST: consul
+      SPRING_CLOUD_CONSUL_PORT: 8500
       SPRING_REDIS_HOST: redis
       SPRING_REDIS_PORT: 6379
     networks:
@@ -54,21 +90,6 @@ services:
       - order-service
     networks:
       - backend
-
-  redis:
-    image: redis:latest
-    container_name: redis
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis-data:/data
-    networks:
-      - backend
-    healthcheck:
-      test: [ "CMD", "redis-cli", "ping" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
 volumes:
   redis-data:
