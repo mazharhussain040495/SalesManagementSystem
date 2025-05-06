@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { OrderService } from '../api/order.service';
 import { OrderResponseDTO } from '../models/order.model';
+import { HeaderComponent } from '../shared/header/header.component';
 
 @Component({
   selector: 'app-order-list',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, HeaderComponent],
   templateUrl: './order-list.component.html',
   styleUrls: ['./order-list.component.scss']
 })

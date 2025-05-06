@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { OrderService } from '../api/order.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrderRequestDTO } from '../models/order.model';
+import { HeaderComponent } from "../shared/header/header.component";
 
 @Component({
   selector: 'app-order-edit',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, HeaderComponent],
   templateUrl: './order-edit.component.html',
   styleUrls: ['./order-edit.component.scss']
 })

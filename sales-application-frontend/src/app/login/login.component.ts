@@ -39,7 +39,7 @@ export class LoginComponent {
       this.authService.login(user).subscribe({
         next: (res) => {
           this.authService.saveToken(res.token);
-          this.router.navigate(['/orders']); // Or wherever you want
+          this.router.navigate(['/dashboard']); // Or wherever you want
         },
         error: () => {
           this.errorMessage = 'Invalid credentials.';

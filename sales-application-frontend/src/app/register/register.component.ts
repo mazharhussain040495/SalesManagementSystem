@@ -46,6 +46,7 @@ export class RegisterComponent {
           this.successMessage = 'User registered successfully!';
           this.errorMessage = '';
           this.form.reset();
+          this.router.navigate(['/login']); 
         },
         error: (err) => {
           this.errorMessage = 'Registration failed. Please try again.';

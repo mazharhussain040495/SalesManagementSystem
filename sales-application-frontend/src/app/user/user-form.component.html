@@ -1,0 +1,36 @@
+<app-header></app-header>
+<div class="user-form">
+  <h2>{{isEditMode ? 'Edit User' : 'Add User'}}</h2>
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <label>
+      Name:
+      <input formControlName="name" type="text" />
+    </label>
+
+    <label>
+      Email:
+      <input formControlName="email" type="email" />
+    </label>
+
+    <label>
+      Password:
+      <input formControlName="password" type="password" />
+    </label>
+
+    <label>
+      Phone:
+      <input formControlName="phone" type="text" />
+    </label>
+
+    <label>
+      Address:
+      <input formControlName="address" type="text" />
+    </label>
+
+    <button type="submit" [disabled]="form.invalid">
+      {{ isEditMode ? 'Update' : 'Create' }}
+    </button>
+    <button type="button" (click)="cancel()">Cancel</button>
+  </form>
+</div>

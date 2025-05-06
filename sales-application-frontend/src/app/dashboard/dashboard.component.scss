@@ -1,0 +1,28 @@
+.dashboard-container {
+    text-align: center;
+    margin-top: 50px;
+  }
+  
+  .button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+  
+  button {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  

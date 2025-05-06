@@ -9,10 +9,11 @@ export interface UserDTO {
   export interface UserResponseDTO {
     id: number;
     name: string;
-    phone: string;
     email: string;
-    address: string;
     password: string;
+    phone: string;
+    address: string;
+    
   }
   
   export interface AuthRequestDTO {

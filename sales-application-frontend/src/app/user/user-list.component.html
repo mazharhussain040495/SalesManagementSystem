@@ -1,0 +1,39 @@
+<app-header></app-header>
+
+<!-- Rest of your user list -->
+
+<div class="user-list-container">
+  <h2>User List</h2>
+
+  <div *ngIf="error" class="error-message">{{ error }}</div>
+
+  <button class="add-button" (click)="addUser()">+ Add New User</button>
+
+  <table *ngIf="users.length" class="user-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Password</th>
+        <th>Phone</th>
+        <th>Address</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users">
+        <td>{{ user.name }}</td>
+        <td>{{ user.email }}</td>
+        <td>*************</td>
+        <td>{{ user.phone }}</td>
+        <td>{{ user.address }}</td>
+        <td>
+          <button (click)="editUser(user.id)">Edit</button>
+          <button (click)="deleteUser(user.id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="!users.length">No users found.</p>
+</div>
